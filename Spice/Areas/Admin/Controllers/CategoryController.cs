@@ -38,6 +38,7 @@ namespace Spice.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 //if valid
+                //Need to write validation to prevent double
                 _db.Category.Add(category);
                 await _db.SaveChangesAsync();
 
