@@ -1,0 +1,123 @@
+﻿@model Spice.Models.ViewModels.MenuItemViewModel
+@using Spice.Extensions
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Delete Menu Item</h2>
+<br />
+<form method="post" enctype="multipart/form-data">
+    <div class="border backgroundWhite row">
+        <input type="hidden" asp-for="MenuItem.Id" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-8">
+            <div class="form-group row">
+                <div class=" col-4">
+                    <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input readonly asp-for="MenuItem.Name" class="form-control" />
+                    <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class=" col-4">
+                    <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    @Html.TextAreaFor(m => m.MenuItem.Description)
+                    <span asp-validation-for="MenuItem.Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class=" col-4">
+                    <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input readonly asp-for="MenuItem.Price" class="form-control" />
+                    <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class=" col-4">
+                    <label asp-for="MenuItem.Category" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input readonly asp-for="@Model.MenuItem.Category.Name" id="CategoryId" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.SubCategory" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input readonly asp-for="@Model.MenuItem.SubCategory.Name" name="SubCategoryId" id="SubCategoryId" class="form-control"></input>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class=" col-4">
+                    <label asp-for="MenuItem.Spicyness" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input readonly asp-for="@Model.MenuItem.Spicyness" class="form-control"></input>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-3 offset-1">
+            <img src="@Model.MenuItem.Image" width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" />
+        </div>
+
+        <div class="col-8">
+            <div class="col-8 offset-4">
+                <partial name="_DeleteAndBackToListButton" model="@Model.MenuItem" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: "lists",
+        menubar: 'file edit format',
+        readonly: 1
+    });
+    </script>
+
+    @*<script type="text/javascript">
+        $(document).ready(function (){
+            getSubCategory();
+            $('#CategoryId').change(function (){
+                getSubCategory();
+            });
+        });
+
+        function getSubCategory() {
+            var url = '@Url.Content("~/")' + "Admin/SubCategory/GetSubCategory";
+            var ddlsource = '#CategoryId';
+            $.getJSON(url, { id:$(ddlsource).val() }, function (data) {
+                var items = '';
+                $('#SubCategoryId').empty();
+                $.each(data, function (i, subcategory) {
+                    items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
+                });
+
+                $('#SubCategoryId').html(items);
+            })
+        }
+        </script>*@
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

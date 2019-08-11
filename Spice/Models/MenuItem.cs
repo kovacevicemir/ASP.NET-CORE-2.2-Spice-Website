@@ -27,7 +27,7 @@ namespace Spice.Models
         [Display(Name = "SubCategory")]
         public int SubCategoryId { get; set; }
         [ForeignKey("SubCategoryId")]
-        public virtual Category SubCategory { get; set; }
+        public virtual SubCategory SubCategory { get; set; }
 
         //Price
         [Range(1,int.MaxValue, ErrorMessage = "Price should be greater than ${1}")]
