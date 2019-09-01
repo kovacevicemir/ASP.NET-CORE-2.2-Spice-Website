@@ -135,7 +135,7 @@ namespace Spice.Areas.Admin.Controllers
             {
                 //files has been uploaded.
                 var uploads = Path.Combine(webRootPath, "images");
-                var extension = Path.GetExtension(files[0].FileName);
+                var extension_new = Path.GetExtension(files[0].FileName);
 
                 //Delete old file
                 var imagePath = Path.Combine(webRootPath, menuItemFromDb.Image.TrimStart('\\'));
@@ -146,11 +146,11 @@ namespace Spice.Areas.Admin.Controllers
                 }
 
                 //upload new file
-                using (var filesSteam = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension), FileMode.Create))
+                using (var filesSteam = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension_new), FileMode.Create))
                 {
                     files[0].CopyTo(filesSteam);
                 }
-                menuItemFromDb.Image = @"\images\" + MenuItemVM.MenuItem.Id + extension;
+                menuItemFromDb.Image = @"\images\" + MenuItemVM.MenuItem.Id + extension_new;
             }
 
             //if user changed details
