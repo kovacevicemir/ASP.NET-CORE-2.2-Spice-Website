@@ -10,6 +10,7 @@ using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Utility;
+using Stripe;
 
 namespace Spice.Areas.Customer.Controllers
 {
@@ -117,7 +118,7 @@ namespace Spice.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPost()
+        public async Task<IActionResult> SummaryPost(string stripeToken)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -172,6 +173,37 @@ namespace Spice.Areas.Customer.Controllers
             HttpContext.Session.SetInt32(SD.ssShoppingCartCount, 0);
             await _db.SaveChangesAsync();
 
+            var options = new ChargeCreateOptions
+            {
+                Amount = Convert.ToInt32(detailsCart.OrderHeader.OrderTotal * 100),
+                Currency = "usd",
+                Description = "Order ID: " + detailsCart.OrderHeader.Id,
+                SourceId = stripeToken
+            };
+
+            var service = new ChargeService();
+            Charge charge = service.Create(options);
+
+            if(charge.BalanceTransactionId == null)
+            {
+                detailsCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
+            }
+            else
+            {
+                detailsCart.OrderHeader.TransactionId = charge.BalanceTransactionId;
+            }
+
+            if(charge.Status.ToLower() == "succeeded")
+            {
+                detailsCart.OrderHeader.PaymentStatus = SD.PaymentStatusApproved;
+                detailsCart.OrderHeader.Status = SD.StatusSubmitted;
+            }
+            else
+            {
+                detailsCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
+            }
+
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
             //return RedirectToAction("Confirm", "Order", new { id = detailsCart.OrderHeader.Id });
         }
