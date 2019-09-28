@@ -1,27 +1,27 @@
 ﻿@model Spice.Models.ViewModels.OrderDetailsCart
+
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <form method="post">
-    @if(Model.listCart.Count > 0)
+    @if (Model.listCart.Count > 0)
     {
         <br />
         <input id="userId" asp-for="@Model.listCart[0].ApplicationUserId" hidden />
         <div class="backgroundWhiteBorder">
             <div class="container">
                 <div class="card">
-
                     <div class="card-header bg-dark text-light ml-0 row container">
                         <div class="col-6">
-                            <i class="fa fas fa-shopping-cart"></i> &nbsp;
+                            <i class="fa fa-shopping-cart"></i> &nbsp;
                             Shopping Cart
                         </div>
                         <div class="col-6 text-right">
                             <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-info btn-sm">Continue Shopping</a>
                         </div>
                     </div>
-
                     <div class="card-body">
                         @foreach (var item in Model.listCart)
                         {
@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
                                     <div class="col-4 text-md-right" style="padding-top:5px;">
-                                        <h6><strong>$@item.MenuItem.Price <span class="text-muted">x</span> @item.Count</strong></h6>
+                                        <h6><strong>$@item.MenuItem.Price <span class="text-muted">x</span> @item.Count </strong></h6>
                                     </div>
                                     <div class="col-6 col-sm-4 col-lg-6">
                                         <div class="float-right mx-1">
@@ -66,25 +66,30 @@
                                         <input asp-for="@Model.OrderHeader.CouponCode" id="txtCouponCode" class="form-control" placeholder="coupon code..." />
                                     </div>
                                     <div class="col-5" style="margin-top:2px;">
-                                        <button type="submit" class="btn btn-sm form-control btn-outline-success" id="btnCoupon" asp-action="AddCoupon">Apply</button>
-                                        <button type="submit" class="btn btn-sm form-control btn-outline-danger" style="display:none" id="btnRemoveCoupon" asp-action="RemoveCoupon">Remove</button>
+                                        <button type="submit" class="btn btn-sm form-control btn-outline-success" id="btnCoupon" asp-action="AddCoupon">
+                                            Apply
+                                        </button>
+                                        <button type="submit" class="btn btn-sm form-control btn-outline-danger" style="display:none" id="btnRemoveCoupon" asp-action="RemoveCoupon">
+                                            Remove
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 offset-md-1 col-lg-4 offset-lg-3 pr-4">
                                 <ul class="list-group">
                                     <li class="list-group-item d-flex justify-content-between bg-light">
-                                        <span class="text-info">Total (USD)</span>
+                                        <span class="text-info"> Total (USD)</span>
                                         <strong class="text-info">$ <span id="txtOrderTotal">@Model.OrderHeader.OrderTotal</span></strong>
                                     </li>
                                 </ul>
                             </div>
                         </div>
 
+
                     </div>
                     <div class="card-footer">
                         <div class="col-12 col-lg-4 offset-lg-8 col-md-6 offset-md-6">
-                            <a asp-action="Summary" asp-area="Customer" asp-controller="Cart" class=" btn btn-success form-control">Summary</a>
+                            <a asp-action="Summary" asp-area="Customer" asp-controller="Cart" class="btn btn-success form-control">Summary</a>
                         </div>
                     </div>
                 </div>
@@ -93,19 +98,19 @@
     }
     else
     {
-        <div class="backgroundWhiteBorder">No items added to the shopping cart...</div>
+        <div class="backgroundWhiteBorder"> No items added to the shopping cart...</div>
     }
 </form>
 
-@section  Scripts{
+@section Scripts{
     <script>
-        $(function(){
+        $(function () {
             var couponCode = document.getElementById("txtCouponCode").value;
-            if(couponCode.length > 0){
+            if (couponCode.length > 0) {
                 document.getElementById('btnCoupon').style.display = 'none';
                 document.getElementById('btnRemoveCoupon').style.display = '';
             }
-            else{
+            else {
                 document.getElementById('btnCoupon').style.display = '';
                 document.getElementById('btnRemoveCoupon').style.display = 'none';
             }

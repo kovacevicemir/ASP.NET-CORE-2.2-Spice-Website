@@ -24,17 +24,17 @@ namespace Spice.Models
         public double OrderTotalOriginal { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "0:C")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Display(Name = "Order Total")]
         public double OrderTotal { get; set; }
 
         [Required]
         [Display(Name = "Pickup Time")]
-        public DateTime PickupTime { get; set; }
+        public DateTime PickUpTime { get; set; }
 
         [Required]
         [NotMapped]
-        public DateTime PickupDate { get; set; }
+        public DateTime PickUpDate { get; set; }
 
         [Display(Name = "Coupon Code")]
         public string CouponCode { get; set; }
