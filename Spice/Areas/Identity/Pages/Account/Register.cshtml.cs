@@ -62,11 +62,13 @@ namespace Spice.Areas.Identity.Pages.Account
 
             [Required]
             public string Name { get; set; }
+
             public string StreetAddress { get; set; }
             public string PhoneNumber { get; set; }
             public string City { get; set; }
             public string State { get; set; }
             public string PostalCode { get; set; }
+
         }
 
         public void OnGet(string returnUrl = null)
@@ -82,7 +84,8 @@ namespace Spice.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,
@@ -96,24 +99,7 @@ namespace Spice.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
 
-                    if(!await _roleManager.RoleExistsAsync(SD.ManagerUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.ManagerUser));
-                    }
-                    if (!await _roleManager.RoleExistsAsync(SD.FrontDeskUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.FrontDeskUser));
-                    }
-                    if (!await _roleManager.RoleExistsAsync(SD.KitchenUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.KitchenUser));
-                    }
-                    if (!await _roleManager.RoleExistsAsync(SD.CustomerEndUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser));
-                    }
-
-                    if(role == SD.KitchenUser)
+                    if (role == SD.KitchenUser)
                     {
                         await _userManager.AddToRoleAsync(user, SD.KitchenUser);
                     }
@@ -151,6 +137,8 @@ namespace Spice.Areas.Identity.Pages.Account
 
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+
 
                 }
                 foreach (var error in result.Errors)
